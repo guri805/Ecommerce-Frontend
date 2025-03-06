@@ -1,5 +1,5 @@
 'use client'
-import SwiperSlider from './SwiperSlider';
+import SwiperSlider from '../common/SwiperSlider';
 import ProductItem from './ProductItem';
 import { SwiperSlide } from 'swiper/react';
 

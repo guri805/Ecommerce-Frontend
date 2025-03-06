@@ -1,4 +1,4 @@
-import Productslider from "./_component/common/Productslider";
+import Productslider from "./_component/productComponents/Productslider";
 import HomeCardSlider from "./_component/HomeComponent/HomeCardSlider";
 import HomeSlide from "./_component/HomeComponent/HomeSlide";
 import TabsComponent from "./_component/common/TabsComponent";

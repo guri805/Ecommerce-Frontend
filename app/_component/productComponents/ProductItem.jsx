@@ -31,7 +31,7 @@ const ProductItem = () => {
                     </div>
 
                     {/* Hover Buttons (Wishlist, Add to Cart, Zoom) */}
-                    <div className="cardhover absolute top-[-15px] right-3 flex flex-col gap-2 -z-50
+                    <div className="cardhover absolute top-[0px] right-3 flex flex-col gap-2 -z-50
                     group-hover:z-50 items-center justify-center group-hover:top-3 transition-all duration-800">
                         {/* Wishlist Button */}
                         <button className="button-wrapper bg-white p-2 rounded-full hover:text-white hover:bg-primary hover:border-primary transition-colors duration-300">

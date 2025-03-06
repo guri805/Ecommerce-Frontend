@@ -18,7 +18,7 @@ const QuickLinks = () => {
     return (
         <>
             <nav className="py-2">
-                <div className="container flex items-center">
+                <div className="flex items-center">
                     {/* Left Navigation: Shop by Categories */}
                     <div className="nav-col-one w-[22%] border-r border-gray-300 pe-3">
                         <Button

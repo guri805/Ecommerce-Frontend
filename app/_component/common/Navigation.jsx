@@ -1,11 +1,8 @@
 'use client'
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation'; // Import usePathname
-import InputComponent from '../FormComponent/inputComponent';
-import Btn from './btn';
 import { FaRegHeart, FaRegUser } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
-import { LuGitCompareArrows } from "react-icons/lu";
 import { Badge, Tooltip, Menu, MenuItem } from '@mui/material';
 import { MdLogout } from "react-icons/md";
 import { IoBagCheckOutline } from "react-icons/io5";
@@ -73,17 +70,19 @@ const Header = () => {
 
                         <div className="col-two w-[50%]">
                             <div className="w-full flex items-center">
-                                <InputComponent
+                                <input
                                     type="text"
                                     placeholder="Search for products..."
-                                    inputClassName="w-full focus:outline-none py-2 px-4 border border-gray-300 rounded-lg text-[14px] font-medium text-gray-700 focus:ring-2 focus:ring-primary"
+                                    className="w-full focus:outline-none py-2 px-4 border border-gray-300 rounded-lg text-[14px] font-medium text-gray-700 focus:ring-2 focus:ring-primary"
                                 />
-                                <Btn
+                                <button
                                     type="submit"
-                                    btnName="Search"
-                                    btnClassName="ml-3 bg-primary text-white py-[10px] px-4 rounded-lg text-[13px] font-medium hover:bg-primary-dark transition"
-                                />
+                                    className="ml-3 bg-primary text-white py-[10px] px-4 rounded-lg text-[13px] font-medium hover:bg-primary-dark transition"
+                                >
+                                    Search
+                                </button>
                             </div>
+
                         </div>
 
                         <div className="col-three w-[40%] flex justify-center items-center">
@@ -118,7 +117,7 @@ const Header = () => {
                                     <IoBagCheckOutline className="mr-2 text-[20px]" /> Order
                                 </MenuItem>
                                 <MenuItem onClick={handleClose}>
-                                    <Link href="/dashboard" className="flex items-center">
+                                    <Link href="/dashboard/overview" className="flex items-center">
                                         <LuLayoutDashboard className="mr-2 text-[20px]" /> Dashboard
                                     </Link>
                                 </MenuItem>
@@ -130,14 +129,6 @@ const Header = () => {
                             <div className="w-[1px] h-10 bg-gray-300 mx-4"></div>
 
                             <div className="flex items-center space-x-4">
-                                <Tooltip title="Compare" arrow>
-                                    <Badge
-                                        badgeContent={4}
-                                        sx={{ '& .MuiBadge-badge': { backgroundColor: '#ff5252', color: 'white' } }}
-                                    >
-                                        <LuGitCompareArrows className="text-gray-600 hover:text-primary w-6 h-6 cursor-pointer transition" />
-                                    </Badge>
-                                </Tooltip>
 
                                 <Tooltip title="Wishlist" arrow>
                                     <Badge

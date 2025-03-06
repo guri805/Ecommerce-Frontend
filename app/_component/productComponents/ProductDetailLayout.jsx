@@ -1,9 +1,8 @@
 "use client"
 import { useRef, useState } from 'react';
-import ProductZoom from './ProductZoom';
+import ProductZoom from '../productComponents/ProductZoom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Rating from '@mui/material/Rating';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { FaRegHeart } from "react-icons/fa";
@@ -43,7 +42,7 @@ const ProductDetailLayout = () => {
         },
     ];
     return (
-        <div className="productMainContainer flex flex-wrap lg:flex-nowrap gap-4">
+        <div className="productMainContainer flex flex-wrap lg:flex-nowrap gap-4 ">
             {/* Left Image Section */}
             <div className="imagesection flex flex-col lg:flex-row gap-4 w-full lg:w-1/3">
                 {/* Vertical Image Slider */}
