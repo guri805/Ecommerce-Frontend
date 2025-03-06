@@ -1,5 +1,5 @@
-import MyAccountLeftSideBar from "../_component/common/MyAccountLeftSideBar";
-import UserMyList from "../_component/common/UserMyList";
+import MyAccountLeftSideBar from "../../_component/common/MyAccountLeftSideBar";
+import UserMyList from "../../_component/common/UserMyList";
 
 const MyList = () => {
     return (

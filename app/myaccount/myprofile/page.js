@@ -1,5 +1,5 @@
-import MyAccountLeftSideBar from "../_component/common/MyAccountLeftSideBar";
-import ProfileForm from "../_component/common/ProfileForm ";
+import MyAccountLeftSideBar from "../../_component/common/MyAccountLeftSideBar";
+import ProfileForm from "../../_component/common/ProfileForm ";
 
 const MyAccount = () => {
   return (

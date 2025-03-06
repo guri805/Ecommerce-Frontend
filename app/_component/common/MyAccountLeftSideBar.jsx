@@ -8,7 +8,7 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import Link from "next/link";
 
 const MyAccountLeftSideBar = () => {
-    const pathname = usePathname(); 
+    const pathname = usePathname();
 
     return (
         <div className="card shadow-md bg-white rounded-md sticky top-[10px]">
@@ -28,10 +28,10 @@ const MyAccountLeftSideBar = () => {
             {/* Sidebar Links */}
             <ul className='myAccounrTabs sideStripe list-none'>
                 {[
-                    { href: "/myaccount", label: "My Profile", icon: <FaRegUser /> },
-                    { href: "/mylist", label: "My List", icon: <FaRegHeart /> },
-                    { href: "/myorder", label: "My Order", icon: <IoBagCheckOutline /> },
-                    { href: "/logout", label: "Logout", icon: <MdLogout /> }
+                    { href: "/myaccount/myprofile", label: "My Profile", icon: <FaRegUser /> },
+                    { href: "/myaccount/mylist", label: "My List", icon: <FaRegHeart /> },
+                    { href: "/myaccount/myorder", label: "My Order", icon: <IoBagCheckOutline /> },
+                    { href: "/myaccount/logout", label: "Logout", icon: <MdLogout /> }
                 ].map(({ href, label, icon }) => (
                     <li key={href} className="w-full">
                         <Link href={href}>

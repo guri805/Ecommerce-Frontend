@@ -8,7 +8,6 @@ import { MdLogout } from "react-icons/md";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { LuLayoutDashboard } from "react-icons/lu";
 import Link from 'next/link';
-import CategoryPanel from './CategoryPanel';
 import QuickLinks from './QuickLinks';
 
 const Header = () => {
@@ -85,7 +84,7 @@ const Header = () => {
 
                         </div>
 
-                        <div className="col-three w-[40%] flex justify-center items-center">
+                        <div className="col-three w-[40%] flex justify-end items-center mr-6">
                             <button
                                 className="!text-black flex items-center justify-end gap-2 w-[200px] max-w-[250px] overflow-hidden"
                                 onClick={handleClick}
@@ -109,7 +108,7 @@ const Header = () => {
                                 className='mt-1 w-[300px]'
                             >
                                 <MenuItem onClick={handleClose}>
-                                    <Link href="/myaccount" className="flex items-center">
+                                    <Link href="/myaccount/myprofile" className="flex items-center">
                                         <FaRegUser className="mr-2 text-[16px]" /> My Account
                                     </Link>
                                 </MenuItem>
