@@ -1,8 +1,11 @@
+'use client'
 import { Rating } from '@mui/material';
+import { usePathname } from 'next/navigation';
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineZoomOutMap, MdOutlineAddShoppingCart } from "react-icons/md";
 
 const ProductListView = () => {
+    const path = usePathname();
     return (
         <div className="bg-white flex rounded-lg shadow-lg overflow-hidden border border-gray-200 w-full mx-auto group">
             {/* Image Section */}
@@ -34,7 +37,7 @@ const ProductListView = () => {
                         <MdOutlineAddShoppingCart className="text-[16px]" />
                     </button>
                     {/* Zoom Button */}
-                    <button className="button-wrapper bg-white p-2 rounded-full hover:text-white hover:bg-primary hover:border-primary transition-colors duration-300">
+                    <button className={`button-wrapper bg-white p-2 rounded-full hover:text-white hover:bg-primary hover:border-primary transition-colors duration-300 ${path !== '/' ? 'hidden' : ''}`}>
                         <MdOutlineZoomOutMap className="text-[16px]" />
                     </button>
                 </div>
@@ -70,7 +73,7 @@ const ProductListView = () => {
                         </p>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     );

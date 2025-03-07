@@ -12,6 +12,7 @@ import QuickLinks from './QuickLinks';
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [isAuth, setIsAuth] = useState(false);
     const open = Boolean(anchorEl);
     const pathname = usePathname(); // Get current route
 
@@ -85,18 +86,32 @@ const Header = () => {
                         </div>
 
                         <div className="col-three w-[40%] flex justify-end items-center mr-6">
-                            <button
-                                className="!text-black flex items-center justify-end gap-2 w-[200px] max-w-[250px] overflow-hidden"
-                                onClick={handleClick}
-                            >
-                                <div className="!text-black !w-[35px] !h-[35px] !min-w-[35px] !rounded-full !bg-[#f1f1f1] flex items-center justify-center">
-                                    <FaRegUser className="text-[18px]" />
-                                </div>
-                                <div className="text-sm leading-4">
-                                    <p className="text-start max-w-[150px] truncate !capitalize">Gursangam</p>
-                                    <p className="text-[12px] max-w-[150px] truncate !lowercase">gursangamsingh2@gmail.com</p>
-                                </div>
-                            </button>
+                            {
+                                isAuth === false ? (
+                                    <p className="mr-3 text-lg font-medium text-gray-700 flex gap-1">
+                                        <Link className="link hover:text-primary " href="/login">
+                                            Login
+                                        </Link>
+                                        /
+                                        <Link className="link hover:text-primary" href="/signup">
+                                            Signup
+                                        </Link>
+                                    </p>
+                                ) : (
+                                    <button
+                                        className="!text-black flex items-center justify-end gap-2 w-[200px] max-w-[250px] overflow-hidden"
+                                        onClick={handleClick}
+                                    >
+                                        <div className="!text-black !w-[35px] !h-[35px] !min-w-[35px] !rounded-full !bg-[#f1f1f1] flex items-center justify-center">
+                                            <FaRegUser className="text-[18px]" />
+                                        </div>
+                                        <div className="text-sm leading-4">
+                                            <p className="text-start max-w-[150px] truncate !capitalize">Gursangam</p>
+                                            <p className="text-[12px] max-w-[150px] truncate !lowercase">gursangamsingh2@gmail.com</p>
+                                        </div>
+                                    </button>
+                                )
+                            }
 
                             <Menu
                                 anchorEl={anchorEl}

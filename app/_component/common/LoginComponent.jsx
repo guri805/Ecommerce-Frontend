@@ -63,7 +63,7 @@ const LoginComponent = () => {
                 </Button>
             </div>
 
-            <Link href="/" className="link cursor-pointer text-sm font-medium">
+            <Link href="/otpverify" className="link cursor-pointer text-sm font-medium">
                 Forgot Password?
             </Link>
 

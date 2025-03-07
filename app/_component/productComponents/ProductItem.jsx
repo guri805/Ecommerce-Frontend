@@ -1,16 +1,21 @@
-'use client'
-import { Rating } from '@mui/material';
+"use client";
+
+import { Rating } from "@mui/material";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineZoomOutMap, MdOutlineAddShoppingCart } from "react-icons/md";
+import { useDialogProductDetail } from "../_context/DialogProductDetailProvider";
+import { usePathname } from "next/navigation";
+
 
 const ProductItem = () => {
+    const { setOpenProductDetailModel } = useDialogProductDetail();
+    const path = usePathname();
 
     return (
         <>
             <div className="cardcontainer">
                 {/* Card Wrapper */}
                 <div className="card shadow-xl border relative border-gray-200 rounded-lg group">
-
                     {/* Image Section */}
                     <div className="image relative pt-[85%]">
                         <img
@@ -21,7 +26,7 @@ const ProductItem = () => {
                         <img
                             src="https://api.spicezgold.com/download/file_1734529297930_fiorra-women-s-teapot-blue-pure-cotton-a-line-kurta-with-sharara-and-dupatta-product-images-rvo9n8udfg-1-202307260626.jpg"
                             alt="product"
-                            className='absolute top-0 h-[100%] w-[100%] object-cover object-top rounded-t-lg opacity-0 group-hover:opacity-100 transition-all duration-500'
+                            className="absolute top-0 h-[100%] w-[100%] object-cover object-top rounded-t-lg opacity-0 group-hover:opacity-100 transition-all duration-500"
                         />
                     </div>
 
@@ -42,9 +47,15 @@ const ProductItem = () => {
                             <MdOutlineAddShoppingCart className="text-[16px]" />
                         </button>
                         {/* Zoom Button */}
-                        <button className="button-wrapper bg-white p-2 rounded-full hover:text-white hover:bg-primary hover:border-primary transition-colors duration-300" onClick={() => context.setOpenProductDetailModel(true)}>
-                            <MdOutlineZoomOutMap className="text-[16px]" />
-                        </button>
+                        {
+                            path === '/' ? (<button
+                                className={`button-wrapper bg-white p-2 rounded-full hover:text-white hover:bg-primary hover:border-primary transition-colors duration-300`}
+                                onClick={() => setOpenProductDetailModel(true)} // Open Dialog
+                            >
+                                <MdOutlineZoomOutMap className="text-[16px]" />
+                            </button>) : ''
+                        }
+
                     </div>
 
                     {/* Content Section */}
@@ -65,7 +76,7 @@ const ProductItem = () => {
                                     name="read-only"
                                     value={3}
                                     readOnly
-                                    sx={{ fontSize: '16px' }} // Adjusted rating size
+                                    sx={{ fontSize: "16px" }} // Adjusted rating size
                                 />
                             </div>
 
@@ -82,6 +93,6 @@ const ProductItem = () => {
             </div>
         </>
     );
-}
+};
 
 export default ProductItem;

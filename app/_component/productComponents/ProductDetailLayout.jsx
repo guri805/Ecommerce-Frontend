@@ -11,6 +11,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation } from 'swiper/modules';
+
 const ProductDetailLayout = () => {
     const [sliderIndex, setSliderIndex] = useState(0)
     const [number, setNumber] = useState(0)
