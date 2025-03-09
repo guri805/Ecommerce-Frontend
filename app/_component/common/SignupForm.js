@@ -1,41 +1,37 @@
 'use client'
-import { IoEye } from "react-icons/io5";
-import { IoEyeOff } from "react-icons/io5";
+import { useEffect, useState } from "react";
+import { useActionState } from "react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { useState } from "react";
+import { signupHandler } from "@/app/action/auth";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
+    const router = useRouter();
     const [isShowPassword, setIsShowPassword] = useState(false);
-    const [formField, setFormField] = useState({
-        fullname: '',
-        email: '',
-        password: ''
-    });
+    const [state, action, pending] = useActionState(signupHandler, undefined);
+    const errors = state?.errors;
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormField({ ...formField, [name]: value });
-    };
+    useEffect(() => {
+        if (state?.success) {
+            router.push("/otpverify");
+        }
+    }, [state?.success, router]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Signup Data:', formField);
-        // Add signup logic here (API call, authentication, etc.)
-    };
     return (
-        <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
+        <form className="w-full flex flex-col gap-4" action={action}>
             <div className="form-group w-full">
                 <TextField
                     type="text"
-                    id="fullname"
-                    label="Name"
+                    id="name"
+                    label="Name*"
                     variant="outlined"
-                    name="fullname"
+                    name="name"
                     className="w-full"
-                    value={formField.fullname}
-                    onChange={handleChange}
                     required
+                    error={!!errors?.name}
+                    helperText={errors?.name || ""}
                 />
             </div>
             <div className="form-group w-full">
@@ -46,9 +42,9 @@ const SignupForm = () => {
                     variant="outlined"
                     name="email"
                     className="w-full"
-                    value={formField.email}
-                    onChange={handleChange}
                     required
+                    error={!!errors?.email}
+                    helperText={errors?.email || ""}
                 />
             </div>
             <div className="form-group w-full relative">
@@ -59,9 +55,9 @@ const SignupForm = () => {
                     variant="outlined"
                     name="password"
                     className="w-full"
-                    value={formField.password}
-                    onChange={handleChange}
                     required
+                    error={!!errors?.password}
+                    helperText={errors?.password || ""}
                 />
                 <Button
                     type="button"
@@ -76,12 +72,16 @@ const SignupForm = () => {
                 </Button>
             </div>
             <div className="w-full">
-                <Button type="submit" className="!w-full !bg-red-500 !text-white">
-                    Sign Up
+                <Button
+                    type="submit"
+                    className="!w-full !bg-red-500 !text-white"
+                    disabled={pending}
+                >
+                    {pending ? "Signing Up..." : "Sign Up"}
                 </Button>
             </div>
         </form>
-    )
-}
+    );
+};
 
-export default SignupForm
+export default SignupForm;

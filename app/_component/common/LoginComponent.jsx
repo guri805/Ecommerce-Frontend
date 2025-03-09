@@ -2,29 +2,16 @@
 
 import { Button, TextField } from '@mui/material';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 
 const LoginComponent = () => {
     const [isShowPassword, setIsShowPassword] = useState(false);
-    const [formField, setFormField] = useState({
-        email: '',
-        password: ''
-    });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormField({ ...formField, [name]: value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Login Data:', formField);
-        // Add login logic here (API call, authentication, etc.)
-    };
+    const [state, action, pending] = useActionState(loginhandler, undefined)
+    const errors = state?.errors;
 
     return (
-        <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
+        <form className="w-full flex flex-col gap-4" action={action}>
             <div className="form-group w-full">
                 <TextField
                     type="email"
@@ -33,10 +20,9 @@ const LoginComponent = () => {
                     variant="outlined"
                     name="email"
                     className="w-full"
-                    value={formField.email}
-                    onChange={handleChange}
                     required
                 />
+                {errors?.email && <p className="error">{errors.email[0]}</p>}
             </div>
             <div className="form-group w-full relative">
                 <TextField
@@ -46,10 +32,9 @@ const LoginComponent = () => {
                     name="password"
                     variant="outlined"
                     className="w-full"
-                    value={formField.password}
-                    onChange={handleChange}
                     required
                 />
+                {errors?.password && <p className="error">{errors.password[0]}</p>}
                 <Button
                     type="button"
                     className="!absolute !top-3 !right-2 !rounded-full !w-[35px] !h-[30px] !min-w-[35px] text-black z-50"
