@@ -1,10 +1,18 @@
 'use client'
 import { verifyOtpHandler } from "@/app/action/auth";
-import { useActionState} from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const VerifyOtp = () => {
+    const router = useRouter();
     const [state, action, pending] = useActionState(verifyOtpHandler, undefined);
     const errors = state?.errors;
+
+    useEffect(() => {
+        if (state?.success) {
+            router.push("/login");
+        }
+    }, [state?.success, router]);
 
     return (
         <form className="w-full flex flex-col gap-4" action={action}>

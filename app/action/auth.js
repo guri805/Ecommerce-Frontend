@@ -3,8 +3,8 @@ import axios from "axios"
 import { loginFormSchema, SignupFormSchema } from "../lib/defination"
 import { createSession, deleteSession } from "../lib/session";
 import { redirect } from "next/navigation";
-import { storeTempUser } from "../utils/tempuser";
-import { getTempUser, clearTempUser } from "../utils/tempuser";
+import { clearTempUser, getTempUser, storeTempUser } from "../utils/tempuser";
+
 
 
 export const signupHandler = async (state, formData) => {
@@ -21,43 +21,70 @@ export const signupHandler = async (state, formData) => {
     const { name, email, password } = validatedFields.data;
 
     try {
-        const response = await axios.post("http://localhost:3001/signup",
-            { name, email, password }
-        );
+        const response = await axios.post("http://localhost:3001/signup", {
+            name,
+            email,
+            password
+        });
 
         console.log("Signup Response:", response.data);
 
         if (response?.data?.success) {
-            // Store temp user in sessionStorage
-            storeTempUser({ name, email, password });
+            //  Ensure `storeTempUser` runs only on the client-side
+            if (typeof window !== "undefined") {
+                storeTempUser(
+                //     {
+                //     name,
+                //     email,
+                //     password,
+                //     otp: response.data.otp,
+                //     otp_expires: (response.data.otp_expires) // Ensure it's stored as a number
+                // }
+            );
+            }
+            console.log("signup storetempuser",storeTempUser());
             return { success: true };
-
         } else {
             return { errors: "Signup failed. Try again." };
         }
+        
+        
     } catch (error) {
         console.error("Signup error:", error);
         return { errors: "Unexpected error occurred during signup." };
     }
 };
 
+
 export const verifyOtpHandler = async (otp) => {
     try {
         const tempUser = getTempUser();
+        console.log("signup verifyotphandler",tempUser);
+        
         if (!tempUser) {
             return { errors: "Session expired. Please sign up again." };
         }
 
+        // ✅ Ensure `otp_expires` is a valid number and check expiry correctly
+        if ((tempUser.otp_expires) < Date.now()) {
+            clearTempUser();
+            return { errors: "OTP expired. Please request a new one." };
+        }
+
         const response = await axios.post("http://localhost:3001/verifyotp", {
             email: tempUser.email,
-            otp
+            otp,
         });
 
         if (response?.data?.success) {
-            // Save user to database after OTP verification
-            await axios.post("http://localhost:3001/saveuser", tempUser);
+            // ✅ Save user to the database after OTP verification
+            await axios.post("http://localhost:3001/saveuser", {
+                name: tempUser.name,
+                email: tempUser.email,
+                password: tempUser.password
+            });
 
-            // Clear temp user data from session storage
+            // ✅ Clear temporary user data from localStorage after successful registration
             clearTempUser();
 
             return { success: true, message: "Email verified successfully!" };
@@ -69,6 +96,7 @@ export const verifyOtpHandler = async (otp) => {
         return { errors: "OTP verification failed." };
     }
 };
+
 
 export const loginhandler = async (state, formData) => {
     const validatedFields = loginFormSchema.safeParse({

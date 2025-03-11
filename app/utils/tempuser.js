@@ -1,14 +1,17 @@
-export const storeTempUser = (userData) => {
+export const storeTempUser = (userData, otp, otp_expires) => {
     if (typeof window !== "undefined") {
-        sessionStorage.setItem("tempUser", JSON.stringify(userData));
+        // localStorage.setItem("tempUser", JSON.stringify({ ...userData, otp, otp_expires }));
+        sessionStorage.setItem("tempUser", "name" );
+
     }
 };
 
 export const getTempUser = () => {
     if (typeof window !== "undefined") {
-        const data = sessionStorage.getItem("tempUser");
-        return data ? JSON.parse(data) : null;
+        const tempUser = sessionStorage.getItem("tempUser");
+        return tempUser ? JSON.parse(tempUser) : null;
     }
+    return null;
 };
 
 export const clearTempUser = () => {
