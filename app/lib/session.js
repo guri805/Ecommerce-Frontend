@@ -48,6 +48,43 @@ export const createSession = async (userId, userRole) => {
     console.log("Session successfully stored in cookies.");
 }
 
+export const createTempUserSession = async (name, email, password, otp) => {
+    const otpExpiry = Date.now() + 10 * 60 * 1000;
+    const session = await encrypt({ name, email, password, otp, otpExpiry })
+    console.log(`session to be stored in cookies: ${session}`);
+    const cookieStore = await cookies()
+    cookieStore.set("tempUser", session, {
+        httpOnly: true,
+        secure: true,
+        expires: otpExpiry,
+        sameSite: "lax",
+        path: "/"
+    })
+    console.log("Session successfully stored in cookies.");
+}
+
+export const getTempUser = async () => {
+    const session = (await cookies()).get("tempUser")?.value;
+
+    if (!session) {
+        return ("session does not exist");
+    }
+
+    try {
+        const payload = await decrypt(session);
+        console.log("payload from session.js ",payload);
+        return payload || ("Error to decrypt session");
+    } catch (error) {
+        console.error("Error decrypting session:", error);
+        return null;
+    }
+}
+
+export async function clearTempUser() {
+    const cookieStore = await cookies()
+    cookieStore.delete('tempUser')
+}
+
 export async function updateSession() {
     const session = (await cookies()).get('session')?.value
     const payload = await decrypt(session)
