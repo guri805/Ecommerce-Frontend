@@ -13,7 +13,7 @@ export const DialogProductDetailProvider = ({ children }) => {
     setOpenProductDetailModel(false);
   };
 
-  console.log("Dialog Open State:", openProductDetailModel);
+  // console.log("Dialog Open State:", openProductDetailModel);
 
   return (
     <DialogProductDetailContext.Provider

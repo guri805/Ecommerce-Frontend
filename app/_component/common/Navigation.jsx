@@ -9,10 +9,12 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import { LuLayoutDashboard } from "react-icons/lu";
 import Link from 'next/link';
 import QuickLinks from './QuickLinks';
+import { useClientSession } from '../_context/ClientSessionDetailsContext';
+import { deleteSession } from '@/app/lib/session';
 
 const Header = () => {
+    const { clientDetails, setClientDetails  } = useClientSession();
     const [anchorEl, setAnchorEl] = useState(null);
-    const [isAuth, setIsAuth] = useState(false);
     const open = Boolean(anchorEl);
     const pathname = usePathname(); // Get current route
 
@@ -22,7 +24,13 @@ const Header = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+    const handleLogoutAndClose = () => {
+        deleteSession();
+        setAnchorEl(null);
+        setClientDetails(null);
+    }
+    // console.log("clientdetails",clientDetails);
+    
     return (
         <div>
             <nav className="bg-white">
@@ -87,7 +95,7 @@ const Header = () => {
 
                         <div className="col-three w-[40%] flex justify-end items-center mr-6">
                             {
-                                isAuth === false ? (
+                                !clientDetails ? (
                                     <p className="mr-3 text-lg font-medium text-gray-700 flex gap-1">
                                         <Link className="link hover:text-primary " href="/login">
                                             Login
@@ -106,8 +114,8 @@ const Header = () => {
                                             <FaRegUser className="text-[18px]" />
                                         </div>
                                         <div className="text-sm leading-4">
-                                            <p className="text-start max-w-[150px] truncate !capitalize">Gursangam</p>
-                                            <p className="text-[12px] max-w-[150px] truncate !lowercase">gursangamsingh2@gmail.com</p>
+                                            <p className="text-start max-w-[150px] truncate !capitalize">{clientDetails?.name}</p>
+                                            <p className="text-[12px] max-w-[150px] truncate !lowercase">{clientDetails?.email}</p>
                                         </div>
                                     </button>
                                 )
@@ -135,7 +143,7 @@ const Header = () => {
                                         <LuLayoutDashboard className="mr-2 text-[20px]" /> Dashboard
                                     </Link>
                                 </MenuItem>
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={handleLogoutAndClose}>
                                     <MdLogout className="mr-2 text-[16px]" /> Logout
                                 </MenuItem>
                             </Menu>

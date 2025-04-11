@@ -1,8 +1,7 @@
-import ForgotPasswordClient from "../_component/common/ForgotPasswordClient"
-
+import ForgotPasswordEmail from "../_component/common/ForgotPasswordEmail"
 
 const ForgotPassword = () => {
-    return <ForgotPasswordClient />
+    return <ForgotPasswordEmail />
 }
 
 export default ForgotPassword

@@ -2,13 +2,13 @@
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 
-//  1st step
+// Setup keys
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey);
 
-// 2nd step
+// Encypt session data
 export const encrypt = async (payload) => {
-    console.log(`before encrypt payload: ${JSON.stringify(payload)}`);
+    // console.log(`before encrypt payload: ${JSON.stringify(payload)}`);
     return new SignJWT(payload)
         .setProtectedHeader({ alg: 'HS256' })
         .setIssuedAt()
@@ -16,75 +16,121 @@ export const encrypt = async (payload) => {
         .sign(encodedKey)
 }
 
-// 3rd
+// Decrypt session data
 export const decrypt = async (session) => {
     try {
-        console.log(`before decrypt session: ${session}`);
+        // console.log(`before decrypt session: ${session}`);
         const { payload } = await jwtVerify(session, encodedKey, {
             algorithms: ["HS256"]
         })
-        console.log(`decrypted payload: ${JSON.stringify(payload)}`);
+        // console.log(`decrypted payload: ${JSON.stringify(payload)}`);
         return payload;
     } catch {
-        console.log("Failed to verify session");
+        // console.log("Failed to verify session");
     }
 }
 
-export const createSession = async (userId, userRole) => {
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-    // encrypt the user id
-    const session = await encrypt({ userId, userRole, expiresAt })
-    console.log(`session to be stored in cookies: ${session}`);
+// Create a temporary session for unverified users (OTP verification)
+export const createTempUserSession = async (email) => {
+    // console.log("Creating temporary session for email:", email);
+    const otpExpiry = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+    const cookieStore = cookies();
+    
+    // Check if the tempUser cookie exists
+    const existingSession =await cookieStore.get("tempUser")?.value;
 
-    const cookieStore = await cookies();
-    // store the session in cookies for optimistic auth check
-    cookieStore.set("session", session, {
-        httpOnly: true,
-        secure: true,
-        expires: expiresAt,
-        sameSite: "lax",
-        path: "/"
-    })
-    console.log("Session successfully stored in cookies.");
-}
+    let sessionData = { email, otpExpiry };
 
-export const createTempUserSession = async (name, email, password, otp) => {
-    const otpExpiry = Date.now() + 10 * 60 * 1000;
-    const session = await encrypt({ name, email, password, otp, otpExpiry })
-    console.log(`session to be stored in cookies: ${session}`);
-    const cookieStore = await cookies()
+    if (existingSession) {
+        try {
+            const existingPayload = await decrypt(existingSession);
+            // console.log("Existing Temp User Session:", existingPayload);
+
+            // Update the email and expiry time
+            sessionData = { ...existingPayload, email, otpExpiry };
+        } catch (error) {
+            // console.log("Error decrypting tempUser session:", error);
+        }
+    }
+
+    // Encrypt and update the cookie
+    const session = await encrypt(sessionData);
     cookieStore.set("tempUser", session, {
         httpOnly: true,
         secure: true,
-        expires: otpExpiry,
+        expires: new Date(otpExpiry),
         sameSite: "lax",
-        path: "/"
-    })
-    console.log("Session successfully stored in cookies.");
-}
+        path: "/",
+    });
 
+    // console.log("Temporary session stored/updated in cookies.");
+};
+
+// Retrieve temporary user session (used for OTP verification)
 export const getTempUser = async () => {
-    const session = (await cookies()).get("tempUser")?.value;
-
-    if (!session) {
-        return ("session does not exist");
-    }
-
     try {
-        const payload = await decrypt(session);
-        console.log("payload from session.js ",payload);
-        return payload || ("Error to decrypt session");
+        const cookieStore = await cookies(); 
+        const session = cookieStore.get("tempUser")?.value;
+
+        if (!session) {
+            return null;
+        }
+
+        // console.log("Retrieved temp session:", session);
+
+        const payload = await decrypt(session); //  Await decrypt function
+        return payload || null;
     } catch (error) {
-        console.error("Error decrypting session:", error);
+        // console.log("Error decrypting session:", error);
         return null;
     }
-}
+};
 
+// Clear tempUser cookie
 export async function clearTempUser() {
     const cookieStore = await cookies()
     cookieStore.delete('tempUser')
 }
 
+// Create a permanent user session (stored in cookies)
+export const createSession = async (id, email, name, role) => {
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days expiry
+    const session = await encrypt({id, email, name, role });
+
+    // console.log("Storing session in cookies:", session);
+
+    const cookieStore = await cookies();
+    cookieStore.set("session", session, {
+        httpOnly: true,
+        secure: true,
+        expires: expiresAt,
+        sameSite: "lax",
+        path: "/",
+    });
+
+    // console.log("Session stored successfully.");
+};
+
+// Get the session 
+export const getSession = async () => {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get("session")?.value;
+
+    if (!sessionCookie) {
+        return null;
+    }
+
+    try {
+        const sessionData = await decrypt(sessionCookie);
+        // console.log("Retrieved Session Data:", sessionData);
+        return sessionData;
+    } catch (error) {
+        // console.error("Error decrypting session:", error);
+        return null;
+    }
+};
+
+// Update a existing session 
 export async function updateSession() {
     const session = (await cookies()).get('session')?.value
     const payload = await decrypt(session)
@@ -104,8 +150,13 @@ export async function updateSession() {
     })
 }
 
+// Delete the session
 export async function deleteSession() {
     const cookieStore = await cookies()
     cookieStore.delete('session')
 }
+
+
+
+
 
