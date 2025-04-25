@@ -66,3 +66,11 @@ export const ResetPasswordFormSchema = z.object({
     path: ["confirmPassword"],
     message: "Passwords do not match",
 });
+
+export const addCategorySchema = z.object({
+    categoryName: z
+        .string()
+        .min(2, "Category must be at least 2 characters long")
+        .max(50, "Category must be at most 50 characters long")
+        .nonempty("Category is required"),
+});

@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import { IoMdClose } from "react-icons/io";
 import CategoryCollapse from './CategoryCollapse';
 
-const CategoryPanel = ({ openCategoryPanel, isOpenCatPanel }) => {
+const CategoryPanel = ({ openCategoryPanel, isOpenCatPanel, categories }) => {
 
     const DrawerList = (
         <Box sx={{ width: 250 }} role="presentation">
@@ -17,7 +17,7 @@ const CategoryPanel = ({ openCategoryPanel, isOpenCatPanel }) => {
                 />
             </h3>
             <Divider />
-            <CategoryCollapse/>
+            <CategoryCollapse categories={categories} />
         </Box>
     );
 

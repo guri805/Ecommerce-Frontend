@@ -117,7 +117,7 @@ body {
   background: #ff5252 !important;
 }
 
-.myproductSliderSwiper .swiper-wrapper .swiper-slide .swiper-slide::before .productSwiperSlider {
+.myproductSliderSwiper .swiper-wrapper .swiper-slide .productSwiperSlider::before {
   margin: 0px;
 }
 

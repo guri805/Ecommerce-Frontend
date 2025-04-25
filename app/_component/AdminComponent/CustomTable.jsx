@@ -23,7 +23,7 @@ const CustomTable = ({ columns, rows }) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
+   
     return (
         <>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -44,53 +44,37 @@ const CustomTable = ({ columns, rows }) => {
 
                     <TableBody>
                         {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                                {columns.map((column) => {
-                                    const value = row[column.id];
-                                    return (
-                                        <TableCell key={`${row.id}-${column.id}`} align={column.align} sx={{ padding: "8px 10px" }}>
-                                            {column.id === "product" ? (
-                                                <div className="flex items-center gap-2 w-full">
-                                                    <LazyLoadImage
-                                                        src={row.image}
-                                                        alt={row.name}
-                                                        effect="blur"
-                                                        className="w-[40px] h-[40px] rounded-md object-contain"
-                                                    />
-                                                    <div className="truncate w-[120px]" title={row.name}>
-                                                        {row.name}
-                                                    </div>
-                                                </div>
-                                            ) : column.id === "categoryImage" || column.id === "userImage" ? (
-                                                <LazyLoadImage
-                                                    src={row.image}
-                                                    alt={column.label}
-                                                    effect="blur"
-                                                    className="w-[50px] h-[50px] rounded-md object-contain"
-                                                />
-                                            ) : column.id === "id" ? (
-                                                <span className="text-primary">{value}</span>
-                                            ) : column.id === "action" ? (
-                                                <div className="flex items-center justify-center gap-2">
-                                                    <button className="text-blue-500 hover:text-blue-700">
-                                                        <FaEye size={18} />
-                                                    </button>
-                                                    <button className="text-yellow-500 hover:text-yellow-700">
-                                                        <FaEdit size={18} />
-                                                    </button>
-                                                    <button className="text-red-500 hover:text-red-700">
-                                                        <FaTrash size={18} />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                value
-                                            )}
-                                        </TableCell>
-                                    );
-                                })}
+                            <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
+                                <TableCell className="font-semibold capitalize" align="left" sx={{ padding: "8px 10px" }}>
+                                    {row.categoryName}
+                                </TableCell>
+
+                                <TableCell align="left" sx={{ padding: "8px 10px" }}>
+                                    <LazyLoadImage
+                                        src={row.categoryImages}
+                                        alt="Category"
+                                        effect="blur"
+                                        className="w-[50px] h-[50px] rounded-md object-contain"
+                                    />
+                                </TableCell>
+
+                                <TableCell align="center" sx={{ padding: "8px 10px" }}>
+                                    <div className="flex items-center justify-center gap-2">
+                                        <button className="text-blue-500 hover:text-blue-700">
+                                            <FaEye size={18} />
+                                        </button>
+                                        <button className="text-yellow-500 hover:text-yellow-700">
+                                            <FaEdit size={18} />
+                                        </button>
+                                        <button className="text-red-500 hover:text-red-700">
+                                            <FaTrash size={18} />
+                                        </button>
+                                    </div>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
+
 
 
                 </Table>

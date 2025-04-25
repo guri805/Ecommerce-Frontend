@@ -1,65 +1,84 @@
-'use client'
+'use client';
 import { useState } from 'react';
 import { BsPlusSquare } from "react-icons/bs";
 import { Button } from '@mui/material';
 import Link from 'next/link';
 
-const CategoryCollapse = () => {
+const CategoryCollapse = ({ categories }) => {
     const [openSubMenu, setOpenSubMenu] = useState({});
     const [openInnerSubMenu, setOpenInnerSubMenu] = useState({});
 
-    const handleOpenSubMenu = (category) => {
+    const toggleSubMenu = (catId) => {
         setOpenSubMenu((prev) => ({
             ...prev,
-            [category]: !prev[category],
+            [catId]: !prev[catId],
         }));
     };
 
-    const handleOpenInnerSubMenu = (category) => {
+    const toggleInnerSubMenu = (catId) => {
         setOpenInnerSubMenu((prev) => ({
             ...prev,
-            [category]: !prev[category],
+            [catId]: !prev[catId],
         }));
     };
 
     return (
         <div className="scroll">
             <ul className="w-full">
-                {['Fashion', 'Electronics'].map((category) => (
-                    <li key={category} className="list-none flex items-center flex-col relative">
-                        <Link href={`/${category.toLowerCase()}`} className="w-full">
-                            <Button className="w-full !link !text-left !justify-start !px-3 !text-[16px] !text-[rgba(0,0,0,0.8)]">
-                                {category}
-                            </Button>
-                        </Link>
-                        <BsPlusSquare
-                            className="absolute top-[10px] right-3 cursor-pointer"
-                            onClick={() => handleOpenSubMenu(category)}
-                        />
-                        {openSubMenu[category] && (
+                {categories.map((mainCat) => (
+                    <li key={mainCat._id} className="list-none flex flex-col relative">
+                        <div className="flex items-center relative">
+                            <Link href={`/${mainCat.categoryName.toLowerCase()}`} className="w-full">
+                                <Button className="w-full !link !text-left !justify-start !px-3 !text-[16px] !text-[rgba(0,0,0,0.8)]">
+                                    {mainCat.categoryName}
+                                </Button>
+                            </Link>
+                            {mainCat.children?.length > 0 && (
+                                <BsPlusSquare
+                                    className="absolute top-[10px] right-3 cursor-pointer"
+                                    onClick={() => toggleSubMenu(mainCat._id)}
+                                />
+                            )}
+                        </div>
+
+                        {/* Subcategories */}
+                        {openSubMenu[mainCat._id] && mainCat.children && (
                             <ul className="submenu w-full pl-3">
-                                <li className="list-none relative">
-                                    <Link href={`/${category.toLowerCase()}/subcategory`} className="w-full">
-                                        <Button className="w-full !link !text-left !justify-start !px-3 !text-[14px] !text-[rgba(0,0,0,0.8)]">
-                                            Subcategory
-                                        </Button>
-                                    </Link>
-                                    <BsPlusSquare
-                                        className="absolute top-[10px] right-3 !w-3 cursor-pointer"
-                                        onClick={() => handleOpenInnerSubMenu(category)}
-                                    />
-                                    {openInnerSubMenu[category] && (
-                                        <ul className="inner-submenu w-full pl-3 mb-2">
-                                            <li className="list-none relative mb-2">
-                                                <Link href={`/${category.toLowerCase()}/subcategory/inner`} className="w-full">
-                                                    <span className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
-                                                        Inner Subcategory
-                                                    </span>
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    )}
-                                </li>
+                                {mainCat.children.map((subCat) => (
+                                    <li key={subCat._id} className="list-none relative flex flex-col">
+                                        <div className="flex items-center relative">
+                                            <Link href={`/${mainCat.categoryName.toLowerCase()}/${subCat.categoryName.toLowerCase()}`} className="w-full">
+                                                <Button className="w-full !link !text-left !justify-start !px-3 !text-[14px] !text-[rgba(0,0,0,0.8)]">
+                                                    {subCat.categoryName}
+                                                </Button>
+                                            </Link>
+                                            {subCat.children?.length > 0 && (
+                                                <BsPlusSquare
+                                                    className="absolute top-[10px] right-3 !w-3 cursor-pointer"
+                                                    onClick={() => toggleInnerSubMenu(subCat._id)}
+                                                />
+                                            )}
+                                        </div>
+
+                                        {/* Inner Subcategories */}
+                                        {openInnerSubMenu[subCat._id] && subCat.children && (
+                                            <ul className="inner-submenu w-full pl-3 mb-2">
+                                                {subCat.children.map((innerCat) => (
+                                                    <li key={innerCat._id} className="list-none relative mb-2">
+                                                        <Link
+                                                            href={`/${mainCat.categoryName.toLowerCase()}/${subCat.categoryName.toLowerCase()}/${innerCat.categoryName.toLowerCase()}`}
+                                                            className="w-full"
+                                                        >
+                                                            <span className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                                                                {innerCat.categoryName}
+                                                            </span>
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </li>
+                                ))}
                             </ul>
                         )}
                     </li>

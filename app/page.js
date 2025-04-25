@@ -3,7 +3,7 @@ import HomeCardSlider from "./_component/HomeComponent/HomeCardSlider";
 import HomeSlide from "./_component/HomeComponent/HomeSlide";
 import TabsComponent from "./_component/common/TabsComponent";
 import AddBannerSlider from "./_component/HomeComponent/AddBannerSlider";
-import ProductDetailDialog from "./_component/common/ProductDetailDialog"; // ✅ Import the dialog
+import ProductDetailDialog from "./_component/common/ProductDetailDialog";
 
 // import icons 
 import { FaShippingFast } from "react-icons/fa";
@@ -12,15 +12,18 @@ import { LiaShippingFastSolid } from "react-icons/lia";
 import { IoWalletOutline } from "react-icons/io5";
 import { ImGift } from "react-icons/im";
 import { BiSupport } from "react-icons/bi";
+import { getCategories } from "./lib/action";
 
-export default function Home() {
+export default async function Home() {
+  const categories = await getCategories();
+  
   return (
     <>
       {/* Hero Section with Slider */}
       <HomeSlide />
       <div className="container mx-auto">
         {/* Home Card Slider */}
-        <HomeCardSlider />
+        <HomeCardSlider categories={categories} />
       </div>
 
       {/* Free Shipping Banner Section */}
@@ -124,7 +127,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ✅ Add Product Detail Dialog at the bottom to ensure it's always available */}
+      {/* Add Product Detail Dialog at the bottom to ensure it's always available */}
       <ProductDetailDialog />
     </>
   );

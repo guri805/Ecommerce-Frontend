@@ -1,9 +1,9 @@
 import AddCategoryForm from "@/app/_component/AdminComponent/AddCategoryForm"
-import DashboardView from "@/app/_component/AdminComponent/DashboardView"
 import Sidebar from "@/app/_component/AdminComponent/Sidebar"
 
 
-const AddProduct = () => {
+const AddCategory = async () => {
+
     return (
         <section className="AddCategory py-10">
             <div className="container">
@@ -13,8 +13,8 @@ const AddProduct = () => {
                     </div>
                     <div className="rightside px-4 basis-3/4">
                         <div className="card bg-white shadow-md rounded-md p-5">
-                            <h2 className='text-xl font-semibold pb-2'>Product Upload</h2>
-                            <AddCategoryForm />
+                            <h2 className='text-xl font-semibold pb-2'>Add Category</h2>
+                            <AddCategoryForm  />
                         </div>
                     </div>
                 </div>
@@ -23,4 +23,4 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct
+export default AddCategory

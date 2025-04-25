@@ -12,8 +12,8 @@ import QuickLinks from './QuickLinks';
 import { useClientSession } from '../_context/ClientSessionDetailsContext';
 import { deleteSession } from '@/app/lib/session';
 
-const Header = () => {
-    const { clientDetails, setClientDetails  } = useClientSession();
+const Header = ({ categories }) => {
+    const { clientDetails, setClientDetails } = useClientSession();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const pathname = usePathname(); // Get current route
@@ -30,7 +30,7 @@ const Header = () => {
         setClientDetails(null);
     }
     // console.log("clientdetails",clientDetails);
-    
+
     return (
         <div>
             <nav className="bg-white">
@@ -180,7 +180,7 @@ const Header = () => {
 
                 {/* Show QuickLinks only on the homepage */}
                 <div className="container mx-auto">
-                    {pathname === '/' && <QuickLinks />}
+                    {pathname === '/' && <QuickLinks categories={categories} />}
                 </div>
 
             </nav>

@@ -1,55 +1,73 @@
-'use client'
+'use client';
+
 import { useState } from "react";
-import CustomInput from "../FormComponent/CustomInput";
+import { useActionState } from "react";
+import { addCategoryHandler } from "@/app/lib/action";
 import CustomBtn from "../common/CustomBtn";
 import ImageUploadbox from "./ImageUploadbox";
+import { TextField } from "@mui/material";
+
+const initialState = { error: null, success: null };
 
 const AddCategoryForm = () => {
-    const [formData, setFormData] = useState({
-        categoryname: "",
-    });
+  const [imageFile, setImageFile] = useState(null);
 
-    const [images, setImages] = useState([]);
+  const [state, formAction, isPending] = useActionState(async (prevState, formData) => {
+    if (!imageFile) {
+      return { error: { categoryImages: ["Image is required"] } };
+    }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    // Append the file manually
+    formData.append("categoryImages", imageFile);
 
-    const handleImageUpload = (uploadedImages) => {
-        setImages(uploadedImages);
-    };
+    return await addCategoryHandler(prevState, formData);
+  }, initialState);
 
-    return (
-        <form>
-            {/* Category Name Input */}
-            <div className="mb-4">
-                <CustomInput
-                    type="text"
-                    name="categoryname"
-                    value={formData.categoryname}
-                    onChange={handleChange}
-                    labelValue="Category Name"
-                    labelClassName="block font-semibold"
-                    inputClassName="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                    required
-                />
-            </div>
+  const handleImageUpload = (images) => {
+    if (images.length > 0) {
+      setImageFile(images[0].file);
+    } else {
+      setImageFile(null);
+    }
+  };
 
-            {/* Media Upload */}
-            <div className="mb-2">
-                <h3 className="text-lg font-semibold">Media & Images</h3>
-                <ImageUploadbox multiple={true} onImagesChange={handleImageUpload} />
-            </div>
+  return (
+    <form action={formAction} >
+      {/* Category Name */}
+      <div className="mb-4">
+        <TextField
+          name="categoryName"
+          label="Category Name*"
+          required
+          className="w-full"
+        />
+        {state?.error?.categoryName && (
+          <p className="text-sm text-red-500">{state.error.categoryName[0]}</p>
+        )}
+      </div>
 
-            {/* Submit Button */}
-            <CustomBtn
-                type="submit"
-                btnName="Add Category"
-                btnClassName="mt-6 w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-            />
-        </form>
-    );
+      {/* Image Upload */}
+      <div className="mb-2">
+        <h3 className="text-lg font-semibold">Upload Image*</h3>
+        <ImageUploadbox multiple={false} onImagesChange={handleImageUpload} />
+        {state?.error?.categoryImages && (
+          <p className="text-sm text-red-500">{state.error.categoryImages[0]}</p>
+        )}
+      </div>
+
+      {/* Submit Button */}
+      <CustomBtn
+        type="submit"
+        btnName={isPending ? "Adding..." : "Add Category"}
+        btnClassName="mt-6 w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700"
+        disabled={isPending}
+      />
+
+      {state?.success && (
+        <p className="text-green-600 text-sm text-center mt-4">{state.success}</p>
+      )}
+    </form>
+  );
 };
 
 export default AddCategoryForm;
