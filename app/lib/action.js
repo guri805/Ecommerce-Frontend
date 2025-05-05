@@ -28,7 +28,9 @@ export const addCategoryHandler = async (_, formData) => {
   try {
     const res = await axios.post(
       "http://localhost:3001/api/category/create-category",
-      finalFormData
+      finalFormData, {
+      withCredentails: true
+    }
     );
 
     if (res?.data?.success) {

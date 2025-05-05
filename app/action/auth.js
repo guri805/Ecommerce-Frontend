@@ -27,6 +27,8 @@ export const signupHandler = async (state, formData) => {
             mobile,
             email,
             password,
+        }, {
+            withCredentails: true
         });
         const serverResponse = response?.data;
         // console.log("Server Response:", serverResponse);

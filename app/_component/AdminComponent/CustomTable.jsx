@@ -1,19 +1,24 @@
-'use client'
+'use client';
 import React, { useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+} from "@mui/material";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import CategoryDetailsDialog from "../common/CategoryDetailDialog";
 
 const CustomTable = ({ columns, rows }) => {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [open, setOpen] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -23,7 +28,17 @@ const CustomTable = ({ columns, rows }) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-   
+
+    const handleView = (category) => {
+        setSelectedCategory(category);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedCategory(null);
+    };
+
     return (
         <>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -60,7 +75,10 @@ const CustomTable = ({ columns, rows }) => {
 
                                 <TableCell align="center" sx={{ padding: "8px 10px" }}>
                                     <div className="flex items-center justify-center gap-2">
-                                        <button className="text-blue-500 hover:text-blue-700">
+                                        <button
+                                            className="text-blue-500 hover:text-blue-700"
+                                            onClick={() => handleView(row)}
+                                        >
                                             <FaEye size={18} />
                                         </button>
                                         <button className="text-yellow-500 hover:text-yellow-700">
@@ -74,21 +92,23 @@ const CustomTable = ({ columns, rows }) => {
                             </TableRow>
                         ))}
                     </TableBody>
-
-
-
                 </Table>
             </TableContainer>
 
-
             <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[5, 10, 15]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+
+            <CategoryDetailsDialog
+                open={open}
+                onClose={handleClose}
+                category={selectedCategory}
             />
         </>
     );

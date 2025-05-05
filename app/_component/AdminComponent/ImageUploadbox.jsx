@@ -42,7 +42,7 @@ const ImageUploadbox = ({ multiple = false, onImagesChange }) => {
     };
 
     return (
-        <div>
+        <div className={multiple ? "flex flex-col gap-3" : "flex gap-5 items-center"}>
             {/* Image Upload Box */}
             <label className="uploadbox p-3 rounded-md overflow-hidden border-2 border-dashed border-gray-300 h-[150px] w-[170px] bg-gray-100 cursor-pointer hover:bg-gray-200 flex items-center justify-center flex-col relative">
                 <FaRegImages className="text-[40px] opacity-35 pointer-events-none" />
